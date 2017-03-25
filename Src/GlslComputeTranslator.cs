@@ -465,7 +465,7 @@ namespace LinqToCompute
                 {
                     if (!_bufferMap.TryGetValue(array, out GlslVariable variable))
                     {
-                        var computeBuffer = new VulkanStorageBuffer(_device, array, TypeSystem.GetElementType(node.Type), ResourceDirection.CpuToGpu);
+                        var computeBuffer = new VulkanBuffer(_device, array, TypeSystem.GetElementType(node.Type), ResourceDirection.CpuToGpu);
                         _ctx.Inputs.Add(computeBuffer);
                         variable = _shader.AddBuffer(computeBuffer.ElementType, true, _startOfChain);
                         _bufferMap.Add(array, variable);
@@ -484,22 +484,22 @@ namespace LinqToCompute
             return node;
         }
 
-        private VulkanStorageBuffer QueryToComputeBuffer(object value)
+        private VulkanBuffer QueryToComputeBuffer(object value)
         {
             Type type = value.GetType();
             Type elementType = TypeSystem.GetElementType(type);
             PropertyInfo pi = type.GetProperty("Enumerable", BindingFlags.NonPublic | BindingFlags.Instance);
             var array = (Array)pi.GetValue(value);
 
-            return new VulkanStorageBuffer(_device, array, elementType, ResourceDirection.CpuToGpu);
+            return new VulkanBuffer(_device, array, elementType, ResourceDirection.CpuToGpu);
         }
 
-        private VulkanStorageBuffer ResolveOutput(int count, Expression expression)
+        private VulkanBuffer ResolveOutput(int count, Expression expression)
         {
             Type type = TypeSystem.GetElementType(expression.Type);
             Array array = Array.CreateInstance(type, count);
 
-            return new VulkanStorageBuffer(_device, array, type, ResourceDirection.GpuToCpu);
+            return new VulkanBuffer(_device, array, type, ResourceDirection.GpuToCpu);
         }
 
         private readonly HashSet<Type> _availableTypes = new HashSet<Type>

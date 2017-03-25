@@ -62,22 +62,22 @@ namespace LinqToCompute
             var translator = new GlslComputeTranslator();
             using (VulkanComputeExecutor executionCtx = translator.Translate(expression, _device))
             {
-                executionCtx.Initialize();
+                executionCtx.GpuSetup();
 
                 _profiler?.Setup.Stop();
                 _profiler?.TransferWrite.Start();
 
-                executionCtx.WriteInput();
+                executionCtx.GpuTransferInput();
 
                 _profiler?.TransferWrite.Stop();
                 _profiler?.Execution.Start();
 
-                executionCtx.Submit();
+                executionCtx.GpuExecute();
 
                 _profiler?.Execution.Stop();
                 _profiler?.TransferRead.Start();
 
-                executionCtx.ReadOutput();
+                executionCtx.GpuTransferOutput();
 
                 _profiler?.TransferRead.Stop();
 

@@ -45,7 +45,7 @@
     <Compile Include="VulkanComputeQuery.cs" />
     <Compile Include="Utilities\TypeSystem.cs" />
     <Compile Include="VulkanDevice.cs" />
-    <Compile Include="VulkanStorageBuffer.cs" />
+    <Compile Include="VulkanBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

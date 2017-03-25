@@ -11,7 +11,7 @@ namespace LinqToCompute
         CpuToGpu, GpuToCpu
     }
 
-    internal unsafe class VulkanStorageBuffer : IDisposable
+    internal unsafe class VulkanBuffer : IDisposable
     {
         public Type ElementType { get; protected set; }
         public int Count => HostResource.Length;
@@ -26,7 +26,7 @@ namespace LinqToCompute
         public long DeviceAlignedSize { get; protected set; }
         public long DeviceSize => Count * DeviceStride;
 
-        public VulkanStorageBuffer(VulkanDevice device, Array hostBuffer, Type elementType, ResourceDirection direction)
+        public VulkanBuffer(VulkanDevice device, Array hostBuffer, Type elementType, ResourceDirection direction)
         {
             Device = device;
             Direction = direction;
@@ -162,6 +162,6 @@ namespace LinqToCompute
             return new DescriptorSetLayoutBinding(binding, DescriptorType.StorageBuffer, 1, ShaderStages.Compute);
         }
 
-        public static implicit operator Buffer(VulkanStorageBuffer resource) => resource.DeviceResource;
+        public static implicit operator Buffer(VulkanBuffer resource) => resource.DeviceResource;
     }
 }

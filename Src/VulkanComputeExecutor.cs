@@ -24,11 +24,11 @@ namespace LinqToCompute
 
         public VulkanDevice Device { get; }
 
-        public List<VulkanStorageBuffer> Inputs { get; } = new List<VulkanStorageBuffer>();
-        public VulkanStorageBuffer Output { get; set; }
+        public List<VulkanBuffer> Inputs { get; } = new List<VulkanBuffer>();
+        public VulkanBuffer Output { get; set; }
         public byte[] SpirV { get; set; }
 
-        public void Initialize()
+        public void GpuSetup()
         {
             Inputs.ForEach(input => input.Initialize());
             Output.Initialize();
@@ -39,12 +39,12 @@ namespace LinqToCompute
             RecordDispatchCommand();
         }
 
-        public void WriteInput()
+        public void GpuTransferInput()
         {
             Inputs.ForEach(input => input.Write());
         }
 
-        public void Submit()
+        public void GpuExecute()
         {
             Queue queue;
             while (!Device.Queues.TryDequeue(out queue)) { }
@@ -53,7 +53,7 @@ namespace LinqToCompute
             Device.Queues.Enqueue(queue);
         }
 
-        public void ReadOutput()
+        public void GpuTransferOutput()
         {
             Output.Read();
         }
