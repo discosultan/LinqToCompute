@@ -7,8 +7,8 @@ The entire public API consists of a single extension method `AsComputeQuery` to 
 ```csharp
 int[] input = Enumerable.Range(0, 200_000_000).ToArray();
 
-input.Select(x => x + 1).ToArray();                  // 3.098s CPU single core
-input.AsParallel().Select(x => x + 1).ToArray();     // 1.290s CPU multiple cores
+input                 .Select(x => x + 1).ToArray(); // 3.098s CPU single core
+input.AsParallel()    .Select(x => x + 1).ToArray(); // 1.290s CPU multiple cores
 input.AsComputeQuery().Select(x => x + 1).ToArray(); // 0.954s GPU
 ```
 
