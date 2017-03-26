@@ -32,14 +32,17 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Glsl\GlslExtensions.cs" />
+    <Compile Include="Glsl\GlslMethodSignature.cs" />
+    <Compile Include="Glsl\GlslVariable.cs" />
     <Compile Include="VulkanComputeExecutor.cs" />
     <Compile Include="Utilities\ComputeMath.cs" />
     <Compile Include="Utilities\ComputeProfiler.cs" />
     <Compile Include="VulkanComputeProvider.cs" />
     <Compile Include="Utilities\Evaluator.cs" />
     <Compile Include="Utilities\Extensions.cs" />
-    <Compile Include="GlslComputeShader.cs" />
-    <Compile Include="GlslComputeTranslator.cs" />
+    <Compile Include="Glsl\GlslComputeShader.cs" />
+    <Compile Include="Glsl\GlslComputeTranslator.cs" />
     <Compile Include="Utilities\IndentingStringBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VulkanComputeQuery.cs" />

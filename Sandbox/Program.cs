@@ -15,6 +15,11 @@ namespace Sandbox
         {
             VulkanDevice.Default.DebugLog += (s, msg) => Debug.WriteLine(msg);
 
+            // Notify the OS that this is a high priority process.
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+
+            WriteLine("Running as x64: " + Environment.Is64BitProcess);
+
             var results = new List<ExecutionResult>();
 
             const int min = 1_024;
@@ -43,15 +48,13 @@ namespace Sandbox
             var cpuWatch2 = new Profiler("CPU Multi");
             var gpuWatch = new Profiler("GPU");
 
-            string name = "forward fourier transform";
+            const string name = "forward fourier transform";
             //const int size = 8388608;
             //const int size = 131072;
             //const int size = 1024;
             const bool validate = false;
             var random = new Random();
             
-            //var xs = ImmutableArray.Create(Generate(size, i => i));
-            //var input = ImmutableArray.Create(Generate(size, _ => new Vector2((float)random.NextDouble(), 0.0f)));
             var xs = Generate(size, i => i);
             var input = Generate(size, _ => new Vector2((float)random.NextDouble(), 0.0f));
             Vector2[] output1 = null, output2 = null, output3 = null;
@@ -288,7 +291,7 @@ namespace Sandbox
         {
             public string Name { get; }
             public int Count { get; }
-            public Profiler[] Profilers { get; } = new Profiler[3];
+            public Profiler[] Profilers { get; }
 
             public ExecutionResult(string name, int count, params Profiler[] profilers)
             {
@@ -306,6 +309,8 @@ namespace Sandbox
                 const ConsoleColor winColor = ConsoleColor.Green;
                 const ConsoleColor loseColor = ConsoleColor.Red;
 
+                WriteLine(Name);
+                WriteLine();
                 for (int i = 0; i < Profilers.Length; i++)
                 {
                     var profiler = Profilers[i];

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using LinqToCompute.Glsl;
 using LinqToCompute.Utilities;
 
 namespace LinqToCompute
@@ -12,8 +13,23 @@ namespace LinqToCompute
     /// </summary>
     public static class VulkanComputeExtensions
     {
-        public static VulkanComputeQuery<T> AsComputeQuery<T>(this IEnumerable<T> sequence, ComputeProfiler profiler = null)
-            => new VulkanComputeProvider(VulkanDevice.Default, profiler).CreateQuery<T>(sequence.AsQueryable().Expression);
+        /// <summary>
+        /// Converts an <see cref="IEnumerable{T}"/> to an <see cref="IQueryable{T}"/> that is
+        /// capable of executing the query on GPU.
+        /// </summary>
+        /// <typeparam name="T">The type of the elements of <paramref name="source"/></typeparam>
+        /// <param name="source">A sequence to convert.</param>
+        /// <param name="profiler">
+        /// An optional profiler that will measure the timings of operating with GPU.
+        /// </param>
+        /// <returns>
+        /// An <see cref="IQueryable{T}"/> that represents the input sequence as a GPU compute query.
+        /// </returns>
+        public static VulkanComputeQuery<T> AsComputeQuery<T>(this IEnumerable<T> source, ComputeProfiler profiler = null)
+        {
+            return new VulkanComputeProvider(VulkanDevice.Default, profiler)
+                .CreateQuery<T>(source.AsQueryable().Expression);
+        }
     }
 
     internal class VulkanComputeProvider : IQueryProvider
@@ -43,8 +59,9 @@ namespace LinqToCompute
 
         IQueryable<TElement> IQueryProvider.CreateQuery<TElement>(Expression expression) => CreateQuery<TElement>(expression);
 
-        public VulkanComputeQuery<TResult> CreateQuery<TResult>(Expression expression)
-            => new VulkanComputeQuery<TResult>(this, expression);
+        public VulkanComputeQuery<TResult> CreateQuery<TResult>(Expression expression) => new VulkanComputeQuery<TResult>(this, expression);
+
+        public TResult Execute<TResult>(Expression expression) => (TResult)Execute(expression);
 
         public object Execute(Expression expression)
         {
@@ -59,6 +76,8 @@ namespace LinqToCompute
             // Identify sub-trees that can be immediately evaluated and turned into values.
             expression = Evaluator.PartialEval(expression);
 
+            // Use GlslComputeTranslator for translation. In future, this could be swapped out for
+            // direct LINQ to SPIR-V translator for slightly improved performance.
             var translator = new GlslComputeTranslator();
             using (VulkanComputeExecutor executionCtx = translator.Translate(expression, _device))
             {
@@ -84,7 +103,5 @@ namespace LinqToCompute
                 return executionCtx.Output.HostResource;
             }
         }
-
-        public TResult Execute<TResult>(Expression expression) => (TResult)Execute(expression);
     }
 }

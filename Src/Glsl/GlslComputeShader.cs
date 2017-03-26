@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using LinqToCompute.Utilities;
 
-namespace LinqToCompute
+namespace LinqToCompute.Glsl
 {
     internal class GlslComputeShader
     {
