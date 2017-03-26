@@ -55,15 +55,16 @@ namespace Sandbox
 
     public class Profiler : ComputeProfiler
     {
-        public Profiler(string name)
+        public Profiler(string name, bool isGpu)
         {
             Name = name;
+            IsGpu = isGpu;
         }
 
         public string Name { get; }
         public Stopwatch Total { get; } = new Stopwatch();
+        public bool IsGpu { get; }
 
         public TimeSpan TotalElapsed => Total.Elapsed;
-        public override TimeSpan ExecutionElapsed => SetupElapsed == TimeSpan.Zero ? TotalElapsed : base.ExecutionElapsed;
     }
 }

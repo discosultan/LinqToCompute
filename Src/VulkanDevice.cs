@@ -8,8 +8,6 @@ namespace LinqToCompute
 {
     public class VulkanDevice : IDisposable
     {
-        private bool _disposed;
-
         public static VulkanDevice Default { get; } = new VulkanDevice(
 #if DEBUG
             true
@@ -19,6 +17,8 @@ namespace LinqToCompute
         );
 
         public event EventHandler<string> DebugLog;
+
+        private bool _disposed;
 
         private VulkanDevice(bool debug)
         {

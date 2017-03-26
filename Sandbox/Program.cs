@@ -19,6 +19,7 @@ namespace Sandbox
             Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
 
             WriteLine("Running as x64: " + Environment.Is64BitProcess);
+            WriteLine();
 
             var results = new List<ExecutionResult>();
 
@@ -28,10 +29,10 @@ namespace Sandbox
 
             // Warm up (JIT).
             RunFourierTransformBenchmark(new List<ExecutionResult>(), min);
+            //for (int size = min; size <= max; size *= 2)
+            //    RunFourierTransformBenchmark(results, size);
 
-            for (int size = min; size <= max; size *= 2)
-                RunFourierTransformBenchmark(results, size);
-            //RunBufferBenchmarks(results);
+            RunBufferBenchmarks(results);
 
             foreach (var result in results)
                 result.Print();
@@ -44,19 +45,19 @@ namespace Sandbox
 
         private static void RunFourierTransformBenchmark(List<ExecutionResult> results, int size)
         {
-            var cpuWatch1 = new Profiler("CPU Single");
-            var cpuWatch2 = new Profiler("CPU Multi");
-            var gpuWatch = new Profiler("GPU");
+            var cpuWatch1 = new Profiler("CPU Single", false);
+            var cpuWatch2 = new Profiler("CPU Multi", false);
+            var gpuWatch = new Profiler("GPU", true);
 
-            const string name = "forward fourier transform";
+            const string name = "Forward Fourier Transform";
             //const int size = 8388608;
             //const int size = 131072;
             //const int size = 1024;
             const bool validate = false;
             var random = new Random();
             
-            var xs = Generate(size, i => i);
-            var input = Generate(size, _ => new Vector2((float)random.NextDouble(), 0.0f));
+            int[] xs = Generate(size, i => i);
+            Vector2[] input = Generate(size, _ => new Vector2((float)random.NextDouble(), 0.0f));
             Vector2[] output1 = null, output2 = null, output3 = null;
 
             // Fast Fourier Transform
@@ -171,27 +172,28 @@ namespace Sandbox
         private static void RunBufferBenchmarks(List<ExecutionResult> results)
         {
             results.Add(Execute(
-                "integer increment",
-                50_000_000,
+                "Integer Increment",
+                100_000_000,
                 i => i,
                 input => input.Select(i => i + 1),
+                input => input.Select(i => i + 1),
                 input => input.Select(i => i + 1)));
-
             var scale = Matrix4x4.CreateScale(2.0f);
             var rotation = Matrix4x4.CreateRotationX((float)Math.PI);
             var translation = Matrix4x4.CreateTranslation(Vector3.One);
             results.Add(Execute(
-                "matrix multiplication",
-                2_000_000,
+                "Matrix Multiplication",
+                5_000_000,
                 _ => Matrix4x4.Identity,
                 input => input.Select(m => m * scale * rotation * translation),
+                input => input.Select(m => m * scale * rotation * translation),
                 input => input.Select(m => m * scale * rotation * translation)));
-
             results.Add(Execute(
-                "vector dot",
-                10_000_000,
+                "Vector Dot",
+                25_000_000,
                 i => new Vector4(i % 10, i % 10 + 1, i % 10 + 2, i % 10 + 3),
-                input => input.Zip(input, Vector4.Dot),
+                input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
+                input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
                 input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
                 comparer: FloatComparer.Default));
         }
@@ -204,43 +206,51 @@ namespace Sandbox
         }
 
         private static ExecutionResult Execute<TSrc, TDst>(
-            string name, 
-            int count, 
-            Func<int, TSrc> factory, 
-            Func<IEnumerable<TSrc>, IEnumerable<TDst>> cpu, 
+            string name,
+            int count,
+            Func<int, TSrc> factory,
+            Func<IEnumerable<TSrc>, IEnumerable<TDst>> cpuSingle, 
+            Func<ParallelQuery<TSrc>, ParallelQuery<TDst>> cpuMulti,
             Func<VulkanComputeQuery<TSrc>, VulkanComputeQuery<TDst>> gpu, 
             IEqualityComparer<TDst> comparer = null)
         {
             WriteLine($"Setting up {name} ...");
 
             // Setup profilers.
-            var cpuWatch = new Profiler("CPU Single");
-            var gpuWatch = new Profiler("GPU");
+            var cpuWatchSingle = new Profiler("CPU Single", false);
+            var cpuWatchMulti = new Profiler("CPU Multi", false);
+            var gpuWatch = new Profiler("GPU", true);
 
             // Generate test data.
             TSrc[] input = Generate(count, factory);
 
-            WriteLine($"Executing {name} on CPU ...");
+            WriteLine($"Executing {name} on CPU (single core) ...");
             PrepareGC();
-            cpuWatch.Total.Start();
-            TDst[] output1 = cpu(input).ToArray();
-            cpuWatch.Total.Stop();
+            cpuWatchSingle.Total.Start();
+            TDst[] output1 = cpuSingle(input).ToArray();
+            cpuWatchSingle.Total.Stop();
+
+            WriteLine($"Executing {name} on CPU (multiple cores) ...");
+            PrepareGC();
+            cpuWatchMulti.Total.Start();
+            TDst[] output2 = cpuMulti(input.AsParallel()).ToArray();
+            cpuWatchMulti.Total.Stop();
 
             WriteLine($"Executing {name} on GPU ...");
             PrepareGC();
             gpuWatch.Total.Start();
-            TDst[] output2 = gpu(input.AsComputeQuery(gpuWatch)).ToArray();
+            TDst[] output3 = gpu(input.AsComputeQuery(gpuWatch)).ToArray();
             gpuWatch.Total.Stop();
 
             comparer = comparer ?? EqualityComparer<TDst>.Default;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < input.Length; i++)
             {
-                if (!comparer.Equals(output1[i], output2[i]))
-                    throw new Exception($"{nameof(output1)}[{i}] {output1[i]} does not equal {nameof(output2)}[{i}] {output2[i]}");
+                if (!comparer.Equals(output1[i], output3[i]))
+                    throw new Exception($"{nameof(output1)}[{i}] {output1[i]} does not equal {nameof(output3)}[{i}] {output3[i]}");
             }
 
             WriteLine();
-            return new ExecutionResult(name, count, cpuWatch, null, gpuWatch);
+            return new ExecutionResult(name, input.Length, cpuWatchSingle, cpuWatchMulti, gpuWatch);
         }
 
         private static T[] Generate<T>(int count, Func<int, T> factory) => Enumerable.Range(0, count).Select(factory).ToArray();
@@ -318,11 +328,16 @@ namespace Sandbox
                     if (profiler == null) continue;
 
                     Write($"{profiler.Name} Total: "); Color(WriteLine, profiler.TotalElapsed, i == bestTotal ? winColor : loseColor);
-                    Write($"  Setup: "); Color(WriteLine, profiler.SetupElapsed, defaultColor);
-                    Write($"  Transfer: "); Color(WriteLine, profiler.TransferElapsed, defaultColor);
-                    Write($"    Write: "); Color(WriteLine, profiler.TransferWriteElapsed, defaultColor);
-                    Write($"    Read: "); Color(WriteLine, profiler.TransferReadElapsed, defaultColor);
-                    Write($"  Execution: "); Color(WriteLine, profiler.ExecutionElapsed, i == bestExecution ? winColor : loseColor);
+                    if (profiler.IsGpu)
+                    {
+                        Write($"  Setup: "); Color(WriteLine, profiler.SetupElapsed, defaultColor);
+                        Write($"   Translate query: "); Color(WriteLine, profiler.SetupQueryElapsed, defaultColor);
+                        Write($"   Initialize device: "); Color(WriteLine, profiler.SetupDeviceElapsed, defaultColor);
+                        Write($"  Transfer: "); Color(WriteLine, profiler.TransferElapsed, defaultColor);
+                        Write($"    Write: "); Color(WriteLine, profiler.TransferWriteElapsed, defaultColor);
+                        Write($"    Read: "); Color(WriteLine, profiler.TransferReadElapsed, defaultColor);
+                        Write($"  Execution: "); Color(WriteLine, profiler.ExecutionElapsed, i == bestExecution ? winColor : loseColor);
+                    }
                     WriteLine();
                 }
             }

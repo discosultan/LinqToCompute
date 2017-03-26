@@ -70,7 +70,7 @@ namespace LinqToCompute
             if (!(expression is MethodCallExpression))
                 throw new InvalidOperationException("Compute queries are only allowed over data sources.");
 
-            _profiler?.Setup.Start();
+            _profiler?.SetupQuery.Start();
 
             // Simplify the expression tree.
             // Identify sub-trees that can be immediately evaluated and turned into values.
@@ -81,9 +81,12 @@ namespace LinqToCompute
             var translator = new GlslComputeTranslator();
             using (VulkanComputeExecutor executionCtx = translator.Translate(expression, _device))
             {
+                _profiler?.SetupQuery.Stop();
+                _profiler?.SetupDevice.Start();
+
                 executionCtx.GpuSetup();
 
-                _profiler?.Setup.Stop();
+                _profiler?.SetupDevice.Stop();
                 _profiler?.TransferWrite.Start();
 
                 executionCtx.GpuTransferInput();
