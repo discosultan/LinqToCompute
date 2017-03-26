@@ -23,21 +23,21 @@ namespace Sandbox
 
             var results = new List<ExecutionResult>();
 
-            const int min = 1_024;
+            const int min = 1_024 * 4;
             //const int max = 32_768;
             const int max = 8_388_608;
 
             // Warm up (JIT).
             RunFourierTransformBenchmark(new List<ExecutionResult>(), min);
-            //for (int size = min; size <= max; size *= 2)
-            //    RunFourierTransformBenchmark(results, size);
+            for (int size = min; size <= max; size *= 2)
+                RunFourierTransformBenchmark(results, size);
 
-            RunBufferBenchmarks(results);
+            //RunBufferBenchmarks(results);
 
             foreach (var result in results)
                 result.Print();
 
-            SaveResultsToFile(results, "results.csv");
+            SaveResultsToFile(results, "all_results.csv", "gpu_results.csv");
 
             WriteLine("Finished!");
             ReadKey();
@@ -49,7 +49,7 @@ namespace Sandbox
             var cpuWatch2 = new Profiler("CPU Multi", false);
             var gpuWatch = new Profiler("GPU", true);
 
-            const string name = "Forward Fourier Transform";
+            const string name = "Fast Fourier Transform";
             //const int size = 8388608;
             //const int size = 131072;
             //const int size = 1024;
@@ -270,13 +270,14 @@ namespace Sandbox
             second = temp;
         }
 
-        private static void SaveResultsToFile(IEnumerable<ExecutionResult> results, string path)
+        private static void SaveResultsToFile(IEnumerable<ExecutionResult> results, string allResultsPath, string gpuResultsPath)
         {
-            using (var writer = File.CreateText(path))
-            {
-                const string separator = "\t";
-                var groups = results.GroupBy(x => x.Count);
+            const string separator = "\t";
+            var groups = results.GroupBy(x => x.Count);
 
+            // LINQ vs PLINQ vs LinqToCompute.
+            using (var writer = File.CreateText(allResultsPath))
+            {
                 foreach (var group in groups)
                 {
                     writer.Write(group.Key);
@@ -291,6 +292,34 @@ namespace Sandbox
                             if (i != result.Profilers.Length - 1)
                                 writer.Write(separator);
                         }
+                        writer.WriteLine();
+                    }
+                }
+            }
+
+            // LinqToCompute detailed.
+            using (var writer = File.CreateText(gpuResultsPath))
+            {
+                foreach (var group in groups)
+                {
+                    writer.Write(group.Key);
+                    writer.Write(separator);
+
+                    foreach (var result in group)
+                    {
+                        var gpuProfiler = result.Profilers[result.Profilers.Length - 1];
+
+                        writer.Write(gpuProfiler.SetupQueryElapsed.TotalSeconds);
+                        writer.Write(separator);
+                        writer.Write(gpuProfiler.SetupDeviceElapsed.TotalSeconds);
+                        writer.Write(separator);
+                        writer.Write(gpuProfiler.TransferWriteElapsed.TotalSeconds);
+                        writer.Write(separator);
+                        writer.Write(gpuProfiler.ExecutionElapsed.TotalSeconds);
+                        writer.Write(separator);
+                        writer.Write(gpuProfiler.TransferReadElapsed.TotalSeconds);
+                        writer.Write(separator);
+
                         writer.WriteLine();
                     }
                 }
