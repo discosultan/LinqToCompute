@@ -1,6 +1,6 @@
 # LinqToCompute
 
-Experimental Vulkan compute provider for .NET LINQ. The purpose of this project is to evaluate the capabilities and potential pitfalls of such a provider.
+Experimental Vulkan compute provider for .NET LINQ. The purpose of this project is to evaluate the capabilities and potential pitfalls of such a provider. Only a very limited set of functionality is implemented.
 
 The entire public API consists of a single extension method `AsComputeQuery` to `IEnumerable{T}`.
 
