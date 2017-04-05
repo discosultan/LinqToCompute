@@ -113,8 +113,7 @@ namespace LinqToCompute
 
             // Create logical device.
             var deviceCreateInfo = new DeviceCreateInfo(
-                new[] { new DeviceQueueCreateInfo(QueueFamilyIndex, numQueues, 1.0f) },
-                new[] { Constant.DeviceExtension.KhrSwapchain });
+                new[] { new DeviceQueueCreateInfo(QueueFamilyIndex, numQueues, 1.0f) });
             Logical = Physical.CreateDevice(deviceCreateInfo);
 
             // Get all queues from the queue family.
