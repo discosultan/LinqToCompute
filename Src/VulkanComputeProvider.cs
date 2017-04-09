@@ -25,7 +25,7 @@ namespace LinqToCompute
         /// <returns>
         /// An <see cref="IQueryable{T}"/> that represents the input sequence as a GPU compute query.
         /// </returns>
-        public static VulkanComputeQuery<T> AsComputeQuery<T>(this IEnumerable<T> source, ComputeProfiler profiler = null)
+        public static VulkanComputeQuery<T> AsCompute<T>(this IEnumerable<T> source, ComputeProfiler profiler = null)
         {
             return new VulkanComputeProvider(VulkanDevice.Default, profiler)
                 .CreateQuery<T>(source.AsQueryable().Expression);
@@ -79,7 +79,7 @@ namespace LinqToCompute
             // Use GlslComputeTranslator for translation. In future, this could be swapped out for
             // direct LINQ to SPIR-V translator for slightly improved performance.
             var translator = new GlslComputeTranslator();
-            using (VulkanComputeExecutor executionCtx = translator.Translate(expression, _device))
+            using (VulkanComputeContext executionCtx = translator.Translate(expression, _device))
             {
                 _profiler?.SetupQuery.Stop();
                 _profiler?.SetupDevice.Start();

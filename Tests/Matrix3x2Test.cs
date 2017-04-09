@@ -11,7 +11,7 @@ namespace LinqToCompute.Tests
             Matrix3x2[] input = { new Matrix3x2(1, 2, 3, 4, 5, 6), new Matrix3x2(7, 8, 9, 10, 11, 12) };
             Matrix3x2[] expectedOutput = { new Matrix3x2(2, 4, 6, 8, 10, 12), new Matrix3x2(8, 10, 12, 14, 16, 18) };
 
-            Matrix3x2[] output = input.AsComputeQuery().Select(x => x + new Matrix3x2(1, 2, 3, 4, 5, 6)).ToArray();
+            Matrix3x2[] output = input.AsCompute().Select(x => x + new Matrix3x2(1, 2, 3, 4, 5, 6)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -24,8 +24,8 @@ namespace LinqToCompute.Tests
             Matrix3x2[] input = { m };
             Matrix3x2[] expectedOutput = { -m };
 
-            Matrix3x2[] output1 = input.AsComputeQuery().Select(x => Matrix3x2.Negate(x)).ToArray();
-            Matrix3x2[] output2 = input.AsComputeQuery().Select(x => -x).ToArray();
+            Matrix3x2[] output1 = input.AsCompute().Select(x => Matrix3x2.Negate(x)).ToArray();
+            Matrix3x2[] output2 = input.AsCompute().Select(x => -x).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -40,8 +40,8 @@ namespace LinqToCompute.Tests
             Matrix3x2[] input = { m };
             Matrix3x2[] expectedOutput = { m * mMultiply };
 
-            Matrix3x2[] output1 = input.AsComputeQuery().Select(x => Matrix3x2.Multiply(x, mMultiply)).ToArray();
-            Matrix3x2[] output2 = input.AsComputeQuery().Select(x => x * mMultiply).ToArray();
+            Matrix3x2[] output1 = input.AsCompute().Select(x => Matrix3x2.Multiply(x, mMultiply)).ToArray();
+            Matrix3x2[] output2 = input.AsCompute().Select(x => x * mMultiply).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -56,8 +56,8 @@ namespace LinqToCompute.Tests
             Matrix3x2[] input = { m };
             Matrix3x2[] expectedOutput = { m * fMultiply };
 
-            Matrix3x2[] output1 = input.AsComputeQuery().Select(x => Matrix3x2.Multiply(x, fMultiply)).ToArray();
-            Matrix3x2[] output2 = input.AsComputeQuery().Select(x => x * fMultiply).ToArray();
+            Matrix3x2[] output1 = input.AsCompute().Select(x => Matrix3x2.Multiply(x, fMultiply)).ToArray();
+            Matrix3x2[] output2 = input.AsCompute().Select(x => x * fMultiply).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -71,8 +71,8 @@ namespace LinqToCompute.Tests
             Matrix3x2[] input = { m };
             Matrix3x2[] expectedOutput = { Matrix3x2.Identity * 2 };
 
-            Matrix3x2[] output1 = input.AsComputeQuery().Select(x => Matrix3x2.Add(x, Matrix3x2.Identity)).ToArray();
-            Matrix3x2[] output2 = input.AsComputeQuery().Select(x => x + Matrix3x2.Identity).ToArray();
+            Matrix3x2[] output1 = input.AsCompute().Select(x => Matrix3x2.Add(x, Matrix3x2.Identity)).ToArray();
+            Matrix3x2[] output2 = input.AsCompute().Select(x => x + Matrix3x2.Identity).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -86,8 +86,8 @@ namespace LinqToCompute.Tests
             Matrix3x2[] input = { m };
             Matrix3x2[] expectedOutput = { m - Matrix3x2.Identity };
 
-            Matrix3x2[] output1 = input.AsComputeQuery().Select(x => Matrix3x2.Subtract(x, Matrix3x2.Identity)).ToArray();
-            Matrix3x2[] output2 = input.AsComputeQuery().Select(x => x - Matrix3x2.Identity).ToArray();
+            Matrix3x2[] output1 = input.AsCompute().Select(x => Matrix3x2.Subtract(x, Matrix3x2.Identity)).ToArray();
+            Matrix3x2[] output2 = input.AsCompute().Select(x => x - Matrix3x2.Identity).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);

@@ -134,7 +134,7 @@ namespace Sandbox
                 {
                     int fftSizeTemp = fftSize;
                     Vector2[] inputTemp = inputCopy;
-                    var query = from x in xs.AsComputeQuery(gpuWatch)
+                    var query = from x in xs.AsCompute(gpuWatch)
                                 let angle = -2 * (float)Math.PI * (x / (float)fftSizeTemp)
                                 let t = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle))
                                 let x0 = (int)Math.Floor((float)x / fftSizeTemp) * (fftSizeTemp / 2) + x % (fftSizeTemp / 2)
@@ -239,7 +239,7 @@ namespace Sandbox
             WriteLine($"Executing {name} on GPU ...");
             PrepareGC();
             gpuWatch.Total.Start();
-            TDst[] output3 = gpu(input.AsComputeQuery(gpuWatch)).ToArray();
+            TDst[] output3 = gpu(input.AsCompute(gpuWatch)).ToArray();
             gpuWatch.Total.Stop();
 
             comparer = comparer ?? EqualityComparer<TDst>.Default;

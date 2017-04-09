@@ -11,7 +11,7 @@ namespace LinqToCompute.Tests
             Vector4[] input = { new Vector4(1, 2, 3, 4), new Vector4(5, 6, 7, 8) };
             Vector4[] expectedOutput = { new Vector4(2, 4, 6, 8), new Vector4(6, 8, 10, 12) };
 
-            Vector4[] output = input.AsComputeQuery().Select(x => x + new Vector4(1, 2, 3, 4)).ToArray();
+            Vector4[] output = input.AsCompute().Select(x => x + new Vector4(1, 2, 3, 4)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -25,8 +25,8 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             Vector4[] expectedOutput = { v + add };
 
-            Vector4[] output1 = input.AsComputeQuery().Select(x => x + add).ToArray();
-            Vector4[] output2 = input.AsComputeQuery().Select(x => Vector4.Add(x, add)).ToArray();
+            Vector4[] output1 = input.AsCompute().Select(x => x + add).ToArray();
+            Vector4[] output2 = input.AsCompute().Select(x => Vector4.Add(x, add)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -41,8 +41,8 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             Vector4[] expectedOutput = { v - subtract };
 
-            Vector4[] output1 = input.AsComputeQuery().Select(x => x - subtract).ToArray();
-            Vector4[] output2 = input.AsComputeQuery().Select(x => Vector4.Subtract(x, subtract)).ToArray();
+            Vector4[] output1 = input.AsCompute().Select(x => x - subtract).ToArray();
+            Vector4[] output2 = input.AsCompute().Select(x => Vector4.Subtract(x, subtract)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -57,8 +57,8 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             Vector4[] expectedOutput = { v * multiply };
 
-            Vector4[] output1 = input.AsComputeQuery().Select(x => x * multiply).ToArray();
-            Vector4[] output2 = input.AsComputeQuery().Select(x => Vector4.Multiply(x, multiply)).ToArray();
+            Vector4[] output1 = input.AsCompute().Select(x => x * multiply).ToArray();
+            Vector4[] output2 = input.AsCompute().Select(x => Vector4.Multiply(x, multiply)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -73,8 +73,8 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             Vector4[] expectedOutput = { v * multiply };
 
-            Vector4[] output1 = input.AsComputeQuery().Select(x => x * multiply).ToArray();
-            Vector4[] output2 = input.AsComputeQuery().Select(x => Vector4.Multiply(x, multiply)).ToArray();
+            Vector4[] output1 = input.AsCompute().Select(x => x * multiply).ToArray();
+            Vector4[] output2 = input.AsCompute().Select(x => Vector4.Multiply(x, multiply)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -89,8 +89,8 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             Vector4[] expectedOutput = { v / divide };
 
-            Vector4[] output1 = input.AsComputeQuery().Select(x => x / divide).ToArray();
-            Vector4[] output2 = input.AsComputeQuery().Select(x => Vector4.Divide(x, divide)).ToArray();
+            Vector4[] output1 = input.AsCompute().Select(x => x / divide).ToArray();
+            Vector4[] output2 = input.AsCompute().Select(x => Vector4.Divide(x, divide)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -105,8 +105,8 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             Vector4[] expectedOutput = { v / divide };
 
-            Vector4[] output1 = input.AsComputeQuery().Select(x => x / divide).ToArray();
-            Vector4[] output2 = input.AsComputeQuery().Select(x => Vector4.Divide(x, divide)).ToArray();
+            Vector4[] output1 = input.AsCompute().Select(x => x / divide).ToArray();
+            Vector4[] output2 = input.AsCompute().Select(x => Vector4.Divide(x, divide)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -121,7 +121,7 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             float[] expectedOutput = { Vector4.Dot(v, dot) };
 
-            float[] output = input.AsComputeQuery().Select(x => Vector4.Dot(x, dot)).ToArray();
+            float[] output = input.AsCompute().Select(x => Vector4.Dot(x, dot)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -134,7 +134,7 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             float[] expectedOutput = { v.Length() };
 
-            float[] output = input.AsComputeQuery().Select(x => x.Length()).ToArray();
+            float[] output = input.AsCompute().Select(x => x.Length()).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -148,7 +148,7 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             float[] expectedOutput = { Vector4.Distance(v, distance) };
 
-            float[] output = input.AsComputeQuery().Select(x => Vector4.Distance(x, distance)).ToArray();
+            float[] output = input.AsCompute().Select(x => Vector4.Distance(x, distance)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -163,7 +163,7 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             Vector4[] expectedOutput = { Vector4.Clamp(v, min, max) };
 
-            Vector4[] output = input.AsComputeQuery().Select(x => Vector4.Clamp(x, min, max)).ToArray();
+            Vector4[] output = input.AsCompute().Select(x => Vector4.Clamp(x, min, max)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -178,7 +178,7 @@ namespace LinqToCompute.Tests
             Vector4[] input = { v };
             Vector4[] expectedOutput = { Vector4.Lerp(v, lerp, amount) };
 
-            Vector4[] output = input.AsComputeQuery().Select(x => Vector4.Lerp(x, lerp, amount)).ToArray();
+            Vector4[] output = input.AsCompute().Select(x => Vector4.Lerp(x, lerp, amount)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }

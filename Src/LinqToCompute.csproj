@@ -55,7 +55,7 @@
     <Compile Include="Glsl\GlslExtensions.cs" />
     <Compile Include="Glsl\GlslMethodSignature.cs" />
     <Compile Include="Glsl\GlslVariable.cs" />
-    <Compile Include="VulkanComputeExecutor.cs" />
+    <Compile Include="VulkanComputeContext.cs" />
     <Compile Include="Utilities\ComputeMath.cs" />
     <Compile Include="Utilities\ComputeProfiler.cs" />
     <Compile Include="VulkanComputeProvider.cs" />

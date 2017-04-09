@@ -14,7 +14,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Sin(v) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Sin(x)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Sin(x)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -27,7 +27,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Cos(v) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Cos(x)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Cos(x)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -40,7 +40,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Tan(v) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Tan(x)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Tan(x)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -53,7 +53,7 @@ namespace LinqToCompute.Tests
             int[] input = { v };
             int[] expectedOutput = { Math.Abs(v) };
 
-            int[] output = input.AsComputeQuery().Select(x => Math.Abs(x)).ToArray();
+            int[] output = input.AsCompute().Select(x => Math.Abs(x)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -66,7 +66,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Log(v) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Log(x)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Log(x)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -79,7 +79,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Floor(v) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Floor(x)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Floor(x)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -92,7 +92,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             int[] expectedOutput = { (int)Math.Floor(v) };
 
-            int[] output = input.AsComputeQuery().Select(x => (int)Math.Floor(x)).ToArray();
+            int[] output = input.AsCompute().Select(x => (int)Math.Floor(x)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -105,7 +105,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Ceiling(v) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Ceiling(x)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Ceiling(x)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -118,7 +118,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Round(v) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Round(x)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Round(x)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -131,7 +131,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Exp(v) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Exp(x)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Exp(x)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -145,7 +145,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { (float)Math.Pow(v, power) };
 
-            float[] output = input.AsComputeQuery().Select(x => (float)Math.Pow(x, power)).ToArray();
+            float[] output = input.AsCompute().Select(x => (float)Math.Pow(x, power)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -160,7 +160,7 @@ namespace LinqToCompute.Tests
             float[] input = { v };
             float[] expectedOutput = { ComputeMath.Clamp(v, min, max) };
 
-            float[] output = input.AsComputeQuery().Select(x => ComputeMath.Clamp(x, min, max)).ToArray();
+            float[] output = input.AsCompute().Select(x => ComputeMath.Clamp(x, min, max)).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }

@@ -12,7 +12,7 @@ namespace LinqToCompute.Glsl
     {
         private VulkanDevice _device;
         private GlslComputeShader _shader;
-        private VulkanComputeExecutor _ctx;
+        private VulkanComputeContext _ctx;
 
         // A pair of variables that are used to keep track of previous and current target assignments.
         private GlslVariable SrcVariable;
@@ -42,12 +42,12 @@ namespace LinqToCompute.Glsl
         // this map is used to track required type conversions for convert type expressions.
         private readonly Dictionary<Expression, Type> _convertNodeToTypeMap = new Dictionary<Expression, Type>();
 
-        public VulkanComputeExecutor Translate(Expression expression, VulkanDevice device)
+        public VulkanComputeContext Translate(Expression expression, VulkanDevice device)
         {
             _device = device;
             _shader = new GlslComputeShader();
 
-            _ctx = new VulkanComputeExecutor(device);
+            _ctx = new VulkanComputeContext(device);
 
             Visit(expression);
 

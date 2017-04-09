@@ -11,7 +11,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { new Vector2(1, 2), new Vector2(3, 4) };
             Vector2[] expectedOutput = { new Vector2(2, 4), new Vector2(4, 6) };
 
-            Vector2[] output = input.AsComputeQuery().Select(x => x + new Vector2(1, 2)).ToArray();
+            Vector2[] output = input.AsCompute().Select(x => x + new Vector2(1, 2)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -25,8 +25,8 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { v + add };
 
-            Vector2[] output1 = input.AsComputeQuery().Select(x => x + add).ToArray();
-            Vector2[] output2 = input.AsComputeQuery().Select(x => Vector2.Add(x, add)).ToArray();
+            Vector2[] output1 = input.AsCompute().Select(x => x + add).ToArray();
+            Vector2[] output2 = input.AsCompute().Select(x => Vector2.Add(x, add)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -40,7 +40,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { new Vector2(v.Y, v.X) };
 
-            Vector2[] output = input.AsComputeQuery().Select(x => new Vector2(x.Y, x.X)).ToArray();
+            Vector2[] output = input.AsCompute().Select(x => new Vector2(x.Y, x.X)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -53,7 +53,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             float[] expectedOutput = { v.X + v.Y };
 
-            float[] output = input.AsComputeQuery().Select(x => x.X + x.Y).ToArray();
+            float[] output = input.AsCompute().Select(x => x.X + x.Y).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -67,8 +67,8 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { v - subtract };
 
-            Vector2[] output1 = input.AsComputeQuery().Select(x => x - subtract).ToArray();
-            Vector2[] output2 = input.AsComputeQuery().Select(x => Vector2.Subtract(x, subtract)).ToArray();
+            Vector2[] output1 = input.AsCompute().Select(x => x - subtract).ToArray();
+            Vector2[] output2 = input.AsCompute().Select(x => Vector2.Subtract(x, subtract)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -83,8 +83,8 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { v * multiply };
 
-            Vector2[] output1 = input.AsComputeQuery().Select(x => x * multiply).ToArray();
-            Vector2[] output2 = input.AsComputeQuery().Select(x => Vector2.Multiply(x, multiply)).ToArray();
+            Vector2[] output1 = input.AsCompute().Select(x => x * multiply).ToArray();
+            Vector2[] output2 = input.AsCompute().Select(x => Vector2.Multiply(x, multiply)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -99,8 +99,8 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { v * multiply };
 
-            Vector2[] output1 = input.AsComputeQuery().Select(x => x * multiply).ToArray();
-            Vector2[] output2 = input.AsComputeQuery().Select(x => Vector2.Multiply(x, multiply)).ToArray();
+            Vector2[] output1 = input.AsCompute().Select(x => x * multiply).ToArray();
+            Vector2[] output2 = input.AsCompute().Select(x => Vector2.Multiply(x, multiply)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -115,8 +115,8 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { v / divide };
 
-            Vector2[] output1 = input.AsComputeQuery().Select(x => x / divide).ToArray();
-            Vector2[] output2 = input.AsComputeQuery().Select(x => Vector2.Divide(x, divide)).ToArray();
+            Vector2[] output1 = input.AsCompute().Select(x => x / divide).ToArray();
+            Vector2[] output2 = input.AsCompute().Select(x => Vector2.Divide(x, divide)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -131,8 +131,8 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { v / divide };
 
-            Vector2[] output1 = input.AsComputeQuery().Select(x => x / divide).ToArray();
-            Vector2[] output2 = input.AsComputeQuery().Select(x => Vector2.Divide(x, divide)).ToArray();
+            Vector2[] output1 = input.AsCompute().Select(x => x / divide).ToArray();
+            Vector2[] output2 = input.AsCompute().Select(x => Vector2.Divide(x, divide)).ToArray();
 
             Assert.Equal(expectedOutput, output1);
             Assert.Equal(expectedOutput, output2);
@@ -147,7 +147,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             float[] expectedOutput = { Vector2.Dot(v, dot) };
 
-            float[] output = input.AsComputeQuery().Select(x => Vector2.Dot(x, dot)).ToArray();
+            float[] output = input.AsCompute().Select(x => Vector2.Dot(x, dot)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -160,7 +160,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             float[] expectedOutput = { v.Length() };
 
-            float[] output = input.AsComputeQuery().Select(x => x.Length()).ToArray();
+            float[] output = input.AsCompute().Select(x => x.Length()).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -174,7 +174,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             float[] expectedOutput = { Vector2.Distance(v, distance) };
 
-            float[] output = input.AsComputeQuery().Select(x => Vector2.Distance(x, distance)).ToArray();
+            float[] output = input.AsCompute().Select(x => Vector2.Distance(x, distance)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -188,7 +188,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             float[] expectedOutput = { Vector2.Distance(v, distance) };
 
-            float[] output = input.AsComputeQuery().Select(x => Vector2.Distance(x, distance)).ToArray();
+            float[] output = input.AsCompute().Select(x => Vector2.Distance(x, distance)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -203,7 +203,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { Vector2.Clamp(v, min, max) };
 
-            Vector2[] output = input.AsComputeQuery().Select(x => Vector2.Clamp(x, min, max)).ToArray();
+            Vector2[] output = input.AsCompute().Select(x => Vector2.Clamp(x, min, max)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -218,7 +218,7 @@ namespace LinqToCompute.Tests
             Vector2[] input = { v };
             Vector2[] expectedOutput = { Vector2.Lerp(v, lerp, amount) };
 
-            Vector2[] output = input.AsComputeQuery().Select(x => Vector2.Lerp(x, lerp, amount)).ToArray();
+            Vector2[] output = input.AsCompute().Select(x => Vector2.Lerp(x, lerp, amount)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }

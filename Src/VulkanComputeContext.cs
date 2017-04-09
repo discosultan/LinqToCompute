@@ -4,7 +4,7 @@ using VulkanCore;
 
 namespace LinqToCompute
 {
-    internal class VulkanComputeExecutor : IDisposable
+    internal class VulkanComputeContext : IDisposable
     {
         private bool _disposed;
 
@@ -17,7 +17,7 @@ namespace LinqToCompute
         private DescriptorPool _descriptorPool;
         private DescriptorSet _descriptorSet;
 
-        public VulkanComputeExecutor(VulkanDevice device)
+        public VulkanComputeContext(VulkanDevice device)
         {
             Device = device;
         }

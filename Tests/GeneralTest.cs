@@ -11,7 +11,7 @@ namespace LinqToCompute.Tests
             int[] input = { 0, 1 };
             int[] expectedOutput = { 0, 1 };
 
-            int[] output = input.AsComputeQuery().Select(x => x).ToArray();
+            int[] output = input.AsCompute().Select(x => x).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -22,7 +22,7 @@ namespace LinqToCompute.Tests
             bool[] input = { true, true };
             bool[] expectedOutput = { true, true };
 
-            bool[] output = input.AsComputeQuery().Select(x => x).ToArray();
+            bool[] output = input.AsCompute().Select(x => x).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -33,7 +33,7 @@ namespace LinqToCompute.Tests
             int[] input = { 0, 1 };
             int[] expectedOutput = { 1, 1 };
 
-            int[] output = input.AsComputeQuery().Select(x => 1).ToArray();
+            int[] output = input.AsCompute().Select(x => 1).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -44,7 +44,7 @@ namespace LinqToCompute.Tests
             int[] input = { 0, 1 };
             int[] expectedOutput = { 1, 2 };
 
-            int[] output = input.AsComputeQuery().Select(x => x + 1).ToArray();
+            int[] output = input.AsCompute().Select(x => x + 1).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -55,7 +55,7 @@ namespace LinqToCompute.Tests
             int[] input = { 0, 1 };
             int[] expectedOutput = { 3, 4 };
 
-            int[] output = input.AsComputeQuery().Select(x => x + 1).Select(x => x + 2).ToArray();
+            int[] output = input.AsCompute().Select(x => x + 1).Select(x => x + 2).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -67,7 +67,7 @@ namespace LinqToCompute.Tests
 
             uint[] expectedOutput = { 0, 1 };
 
-            uint[] output = input.AsComputeQuery().Select(x => (uint)x).ToArray();
+            uint[] output = input.AsCompute().Select(x => (uint)x).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -79,7 +79,7 @@ namespace LinqToCompute.Tests
             const int localVariable = 1;
             int[] expectedOutput = { 1, 2 };
 
-            int[] output = input.AsComputeQuery().Select(x => x + localVariable).ToArray();
+            int[] output = input.AsCompute().Select(x => x + localVariable).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -91,7 +91,7 @@ namespace LinqToCompute.Tests
             const int localVariable = 1;
             int[] expectedOutput = { 1, 2 };
 
-            int[] output = input.AsComputeQuery().Select(x => localVariable + x).ToArray();
+            int[] output = input.AsCompute().Select(x => localVariable + x).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -102,7 +102,7 @@ namespace LinqToCompute.Tests
             float[] input = { 0 };
             float[] expectedOutput = { 0.5f };
 
-            float[] output = input.AsComputeQuery().Select(x => 0.5f).ToArray();
+            float[] output = input.AsCompute().Select(x => 0.5f).ToArray();
 
             Assert.Equal(expectedOutput, output, FloatComparer.Default);
         }
@@ -120,7 +120,7 @@ namespace LinqToCompute.Tests
             CustomStructure[] input = { new CustomStructure(0), new CustomStructure(1) };
             CustomStructure[] expectedOutput = { new CustomStructure(1), new CustomStructure(2) };
 
-            CustomStructure[] output = input.AsComputeQuery().Select(x => new CustomStructure(x.Value + 1)).ToArray();
+            CustomStructure[] output = input.AsCompute().Select(x => new CustomStructure(x.Value + 1)).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -131,7 +131,7 @@ namespace LinqToCompute.Tests
             CustomStructure[] input = { new CustomStructure(0), new CustomStructure(1) };
             CustomStructure[] expectedOutput = { new CustomStructure(1), new CustomStructure(2) };
 
-            CustomStructure[] output = input.AsComputeQuery().Select(x => new CustomStructure { Value = x.Value + 1 }).ToArray();
+            CustomStructure[] output = input.AsCompute().Select(x => new CustomStructure { Value = x.Value + 1 }).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -142,7 +142,7 @@ namespace LinqToCompute.Tests
             CustomStructure[] input = { new CustomStructure(0), new CustomStructure(1) };
             int[] expectedOutput = { 0, 1 };
 
-            int[] output = input.AsComputeQuery().Select(x => x.Value).ToArray();
+            int[] output = input.AsCompute().Select(x => x.Value).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -154,7 +154,7 @@ namespace LinqToCompute.Tests
             int[] input2 = { 2, 4 };
             int[] expectedOutput = input1.Zip(input2, (x, y) => x + y).ToArray();
 
-            int[] output = input1.AsComputeQuery().Zip(input2, (x, y) => x + y).ToArray();
+            int[] output = input1.AsCompute().Zip(input2, (x, y) => x + y).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -165,7 +165,7 @@ namespace LinqToCompute.Tests
             int[] input = { 1, 2 };
             int[] expectedOutput = input.Zip(input, (x, y) => x + y).ToArray();
 
-            int[] output = input.AsComputeQuery().Zip(input, (x, y) => x + y).ToArray();
+            int[] output = input.AsCompute().Zip(input, (x, y) => x + y).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -176,7 +176,7 @@ namespace LinqToCompute.Tests
             int[] input = { 1 };
             int[] expectedOutput = { 2 };
 
-            int[] output = input.AsComputeQuery().Select(x => new { x }).Select(x => 2).ToArray();
+            int[] output = input.AsCompute().Select(x => new { x }).Select(x => 2).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -187,7 +187,7 @@ namespace LinqToCompute.Tests
             int[] input = { 1 };
             int[] expectedOutput = { 2 };
 
-            int[] output = input.AsComputeQuery().Select(x => new { x, y = 2 }).Select(x => new { z = x.x, w = x.y }).Select(x => x.w).ToArray();
+            int[] output = input.AsCompute().Select(x => new { x, y = 2 }).Select(x => new { z = x.x, w = x.y }).Select(x => x.w).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -198,7 +198,7 @@ namespace LinqToCompute.Tests
             int[] input = { 1 };
             int[] expectedOutput = { 2 };
 
-            int[] output = input.AsComputeQuery().Select(x => new { x }).Select(x => new { x, y = 2 }).Select(x => x.y).ToArray();
+            int[] output = input.AsCompute().Select(x => new { x }).Select(x => new { x, y = 2 }).Select(x => x.y).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -210,7 +210,7 @@ namespace LinqToCompute.Tests
             int[] array = { 1, 2 };
             int[] expectedOutput = { 2 };
 
-            int[] output = input.AsComputeQuery().Select(x => array[x]).ToArray();
+            int[] output = input.AsCompute().Select(x => array[x]).ToArray();
 
             Assert.Equal(expectedOutput, output);
         }
@@ -222,7 +222,7 @@ namespace LinqToCompute.Tests
             int[] expectedOutput = { 3 };
 
             int[] output = (
-                from x in input.AsComputeQuery()
+                from x in input.AsCompute()
                 let y = x + 1
                 let z = y + 1
                 select z).ToArray();
