@@ -29,10 +29,11 @@ namespace Sandbox
 
             // Warm up (JIT).
             RunFourierTransformBenchmark(new List<ExecutionResult>(), min);
-            for (int size = min; size <= max; size *= 2)
-                RunFourierTransformBenchmark(results, size);
 
-            //RunBufferBenchmarks(results);
+            //for (int size = min; size <= max; size *= 2)
+            //    RunFourierTransformBenchmark(results, size);
+
+            RunBufferBenchmarks(results);
 
             foreach (var result in results)
                 result.Print();
@@ -171,38 +172,44 @@ namespace Sandbox
 
         private static void RunBufferBenchmarks(List<ExecutionResult> results)
         {
-            results.Add(Execute(
-                "Integer Increment",
-                100_000_000,
+            Execute(
+                "JIT WARM UP",
+                1,
                 i => i,
                 input => input.Select(i => i + 1),
                 input => input.Select(i => i + 1),
-                input => input.Select(i => i + 1)));
-            var scale = Matrix4x4.CreateScale(2.0f);
-            var rotation = Matrix4x4.CreateRotationX((float)Math.PI);
-            var translation = Matrix4x4.CreateTranslation(Vector3.One);
-            results.Add(Execute(
-                "Matrix Multiplication",
-                5_000_000,
-                _ => Matrix4x4.Identity,
-                input => input.Select(m => m * scale * rotation * translation),
-                input => input.Select(m => m * scale * rotation * translation),
-                input => input.Select(m => m * scale * rotation * translation)));
-            results.Add(Execute(
-                "Vector Dot",
-                25_000_000,
-                i => new Vector4(i % 10, i % 10 + 1, i % 10 + 2, i % 10 + 3),
-                input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
-                input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
-                input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
-                comparer: FloatComparer.Default));
-        }
+                input => input.Select(i => i + 1));
 
-        private static void PrepareGC()
-        {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+            for (int count = 1024; count <= 268_435_456 / 2; count *= 4)
+            {
+                results.Add(Execute(
+                    "Integer Increment",
+                    count,
+                    i => i,
+                    input => input.Select(i => i + 1),
+                    input => input.Select(i => i + 1),
+                    input => input.Select(i => i + 1)));
+            }
+
+            //var scale = Matrix4x4.CreateScale(2.0f);
+            //var rotation = Matrix4x4.CreateRotationX((float)Math.PI);
+            //var translation = Matrix4x4.CreateTranslation(Vector3.One);
+            //results.Add(Execute(
+            //    "Matrix Multiplication",
+            //    5_000_000,
+            //    _ => Matrix4x4.Identity,
+            //    input => input.Select(m => m * scale * rotation * translation),
+            //    input => input.Select(m => m * scale * rotation * translation),
+            //    input => input.Select(m => m * scale * rotation * translation)));
+
+            //results.Add(Execute(
+            //    "Vector Dot",
+            //    25_000_000,
+            //    i => new Vector4(i % 10, i % 10 + 1, i % 10 + 2, i % 10 + 3),
+            //    input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
+            //    input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
+            //    input => input.Zip(input, (v1, v2) => Vector4.Dot(v1, v2)),
+            //    comparer: FloatComparer.Default));
         }
 
         private static ExecutionResult Execute<TSrc, TDst>(
@@ -324,6 +331,13 @@ namespace Sandbox
                     }
                 }
             }
+        }
+
+        private static void PrepareGC()
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
         }
 
         private class ExecutionResult
