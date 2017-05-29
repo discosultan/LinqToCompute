@@ -2,7 +2,7 @@
 
 Experimental Vulkan compute provider for .NET LINQ. The purpose of this project is to evaluate the capabilities and potential pitfalls of such a provider. Only a very limited set of functionality is implemented.
 
-The entire public API consists of a single extension method `AsComputeQuery` to `IEnumerable{T}`.
+The entire public API consists of a single extension method `AsCompute` to `IEnumerable{T}`.
 
 ```csharp
 int[] input = Enumerable.Range(0, 200_000_000).ToArray();
