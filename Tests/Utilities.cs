@@ -7,7 +7,7 @@ namespace LinqToCompute.Tests
     {
         public static FloatComparer Default { get; } = new FloatComparer();
 
-        private const float Precision = 0.00001f;
+        private const float Precision = 0.0001f;
 
         public bool Equals(float x, float y) => Math.Abs(x - y) < Precision;
 

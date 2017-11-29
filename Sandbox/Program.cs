@@ -11,7 +11,7 @@ namespace Sandbox
 {
     internal static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             VulkanDevice.Default.DebugLog += (s, msg) => Debug.WriteLine(msg);
 
